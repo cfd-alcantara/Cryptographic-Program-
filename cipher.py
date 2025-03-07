@@ -19,11 +19,11 @@ def mode_input():
             print('Invalid input. Input either E for encryption or D for Decryption')
             time.sleep(2)
 
-def ceasar_cipher():
+def caesar_cipher():
     plain_text = ''
     cipher_text = ''
 
-    print('\nCeasar Cipher\n')
+    print('\nCaesar Cipher\n')
     mode = mode_input()
     while True:
         key = input('Enter the key (1-26): ')

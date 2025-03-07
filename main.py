@@ -34,7 +34,7 @@ while True:
 
     cryptographic_algorithm = choose_cryptographic_algorithm()
     if cryptographic_algorithm == '1':
-        ceasar_cipher()
+        caesar_cipher()
     elif cryptographic_algorithm == '2':
         print('N/A1')
     elif cryptographic_algorithm == '3':
