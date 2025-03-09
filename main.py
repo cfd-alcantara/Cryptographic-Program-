@@ -36,11 +36,11 @@ while True:
     if cryptographic_algorithm == '1':
         caesar_cipher()
     elif cryptographic_algorithm == '2':
-        print('N/A1')
+        monoalphabetic_cipher()
     elif cryptographic_algorithm == '3':
         print('N/A2')
     elif cryptographic_algorithm == '4':
-        print('own cryptographic algorithm')
+        vernam_cipher()
     #mode_input()
     run_program = prompt_run_again()
     if run_program == 'n':
