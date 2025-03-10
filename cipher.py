@@ -1,23 +1,10 @@
 import time
 import string
+import ast
+from utils import mode_input, generate_repeating_key, is_hex, convert_binary, generate_nonrepeating_key
 
 lower_case_letters = string.ascii_lowercase
 upper_case_letters = string.ascii_uppercase
-
-def mode_input():
-    while True:
-        print('Encrypt(E) or Decrypt(D)?')
-        mode = input('E/D: ').lower()
-        if mode == 'e':
-            print('\nEncryption mode\n')
-            return mode
-
-        elif mode == 'd':
-            print('\nDecryption mode\n')
-            return mode
-        else:
-            print('Invalid input. Input either E for encryption or D for Decryption')
-            time.sleep(2)
 
 def caesar_cipher():
     plain_text = ''
@@ -76,69 +63,87 @@ def caesar_cipher():
             else:
                 plain_text += letter
         print(f'\nCIPHERTEXT: {user_cipher_text}')
-        print(f'DECRYPTED MESSAGE or PLAINTEXT: {plain_text}')
-        
+        print(f'DECRYPTED MESSAGE or PLAINTEXT: {plain_text}') 
 
 def vernam_cipher():
     print("\nVernam Cipher\n")
 
-    plaintext = input("Enter the plaintext to encrypt or decrypt: ").upper()
+    mode = mode_input()
 
-    key = input(f"Enter the key (length should be {len(plaintext)}): ").upper()
+    if mode == 'e':
+        plaintext = input("Enter the plaintext to encrypt: ")
+        key = generate_repeating_key(upper_case_letters, len(plaintext))
 
-    while len(key) != len(plaintext):
-        print(f"The key must be {len(plaintext)} characters long.")
-        key = input(f"Enter the key (length should be {len(plaintext)}): ").upper()
+        print("\nPlaintext:", plaintext)
+        print("Key:", key)
 
-    print("Plaintext:", plaintext)
-    print("Key:", key)
+        ciphertext = ''
+        for i in range(len(plaintext)):
+            ciphertext += chr(ord(plaintext[i]) ^ ord(key[i]))
 
-    ciphertext = ""
-    for i in range(len(plaintext)):
-        ciphertext += chr(ord(plaintext[i]) ^ ord(key[i]))
+        binary_ciphertext = ''
+        binary_ciphertext = ' '.join(f'{ord(c):08b}' for c in ciphertext)
 
-    print("Ciphertext:", ciphertext)
-
-    decrypted_text = ""
-    for i in range(len(ciphertext)):
-        decrypted_text += chr(ord(ciphertext[i]) ^ ord(key[i]))
-
-    print("Decrypted Text:", decrypted_text)
+        hex_ciphertext = ciphertext.encode().hex()
 
 
+        print("Ciphertext in Binary: ", (binary_ciphertext))
+        print("Ciphertext in Hexadecimal: ", (hex_ciphertext))
+
+    else:
+        decrypted_text = ""
+        ciphertext = input("Enter the ciphertext to decrypt: ").upper()
+        key = input(f"Enter the key: ").upper()
+
+        if is_hex(ciphertext) == True:
+            ciphertext = bytes.fromhex(ciphertext).decode()
+        else:
+            ciphertext = convert_binary(ciphertext)
+
+        for i in range(len(ciphertext)):
+            decrypted_text += chr(ord(ciphertext[i]) ^ ord(key[i]))
+
+        print("Decrypted Text:", decrypted_text)
 
 def monoalphabetic_cipher():
     print("\nMonoalphabetic Cipher\n")
 
-    # Generate cipher key
-    shift = int(input("Enter the shift value for the cipher (1-25): "))
-    alphabet = 'abcdefghijklmnopqrstuvwxyz'
-    shifted_alphabet = alphabet[shift:] + alphabet[:shift]
-    key = dict(zip(alphabet, shifted_alphabet))
-
     mode = mode_input()
     if mode == 'e':
+
+        # Generate cipher key
+        key = generate_nonrepeating_key(upper_case_letters, len(upper_case_letters))
+        key = dict(zip(upper_case_letters, key))
+
         plaintext = input("Enter the message to encrypt: ")
         encrypted_message = ''
         for char in plaintext:
             if char.isalpha():
                 if char.islower():
-                    encrypted_message += key[char]
+                    encrypted_message += key[char.upper()].lower()
                 else:
-                    encrypted_message += key[char.lower()].upper()
+                    encrypted_message += key[char]
             else:
                 encrypted_message += char
+                
+        print(key)
         print("Encrypted message:", encrypted_message)
     else:
         ciphertext = input("Enter the message to decrypt: ")
+        key_str = input("Enter the encryption key as a dictionary: \n")  
+        key = ast.literal_eval(key_str)
+
+        print(key)
+
         reverse_key = {v: k for k, v in key.items()}
+        print(reverse_key)
         decrypted_message = ''
         for char in ciphertext:
             if char.isalpha():
                 if char.islower():
-                    decrypted_message += reverse_key[char]
+                    decrypted_message += reverse_key[char.upper()].lower()
                 else:
-                    decrypted_message += reverse_key[char.lower()].upper()
+                    decrypted_message += reverse_key[char]
             else:
                 decrypted_message += char
         print("Decrypted message:", decrypted_message)
