@@ -8,7 +8,7 @@ cryptographic_algorithm = ''
 def choose_cryptographic_algorithm():
     while True:
         print('Choose one from the four cryptographic algorithms to use for encryption and decryption')
-        print('1. Ceasar Cipher\n2. Monoalphabetic Cipher\n3. Vernam Cipher\n4. N/A\n5. Close the Program')
+        print('1. Ceasar Cipher\n2. Monoalphabetic Cipher\n3. Vernam Cipher\n4. Own Cipher\n5. Close the Program')
         choice = input('Enter the number of your choice (1-5): ').lower()
         if choice not in ('1', '2', '3', '4', '5'):
             print('Invalid input. Input should only be number 1-4\n')
@@ -41,7 +41,7 @@ while True:
     elif cryptographic_algorithm == '3':
         vernam_cipher()
     elif cryptographic_algorithm == '4':
-        print('N/A')
+        own_cipher()
     elif cryptographic_algorithm == '5':
         print('Thank for using this Console-Based Cryptographic Program!')
         time.sleep(2)

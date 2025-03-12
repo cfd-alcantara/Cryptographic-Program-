@@ -31,3 +31,16 @@ def generate_repeating_key(string, length):
 def generate_nonrepeating_key(string, length):
     generated_key = ''.join(secrets.SystemRandom().sample(string, length))
     return generated_key
+
+def expand_key_to_match(plaintext, key):
+    key_index = 0
+    expanded_key = ''
+    for i in range(len(plaintext)):
+        expanded_key += key[key_index]
+        
+        if key_index == len(key)-1:
+            key_index = 0
+        else:
+            key_index += 1
+
+    return expanded_key
