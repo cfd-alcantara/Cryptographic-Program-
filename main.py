@@ -25,7 +25,9 @@ def prompt_run_again():
             print()
             return response
         elif response == 'n':
-            print('Goodbye, thank you for using this program!!')
+            os.system('cls')
+            print('Thank for using this Console-Based Cryptographic Program!')
+            time.sleep(2)
             return response
         else:
             print('Invalid input. Input either Y for yes or N for no')
@@ -52,4 +54,6 @@ while True:
     run_program = prompt_run_again()
     if run_program == 'n':
         break
+
+
 
