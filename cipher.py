@@ -2,7 +2,7 @@ import time
 import string
 import ast
 import os
-from utils import mode_input, input_plaintext, input_ciphertext, print_encryption_result, print_decryption_result, generate_repeating_key, is_hex, generate_nonrepeating_key, expand_key_to_match
+from utils import mode_input, ask_key_method, input_key, input_plaintext, input_ciphertext, print_encryption_result, print_decryption_result, generate_repeating_key, is_hex, generate_nonrepeating_key, expand_key_to_match
 
 lower_case_letters = string.ascii_lowercase
 upper_case_letters = string.ascii_uppercase
@@ -72,7 +72,15 @@ def bitwise_xor_cipher():
 
     if mode == 'e':
         plaintext = input_plaintext()
-        key = generate_repeating_key(upper_case_letters + lower_case_letters, len(plaintext))
+
+        key_method = ask_key_method()
+        if key_method == 'm':
+            key = input_key()
+
+            if len(key) < len(plaintext):
+                key = expand_key_to_match(plaintext, key)
+        else:
+            key = generate_repeating_key(upper_case_letters + lower_case_letters, len(plaintext))
 
         ciphertext = ''
         for i in range(len(plaintext)):
@@ -90,17 +98,14 @@ def bitwise_xor_cipher():
         ciphertext = input_ciphertext()
         orig_ciphertext = ciphertext
 
-        while True:
-                key = input("Enter the key: ")
-                if key == '':
-                    print('Key has no value\n')
-                    time.sleep(2)
-                else:
-                    break
+        key = input_key()
 
         try:
             if is_hex(ciphertext) == True:
                 ciphertext = bytes.fromhex(ciphertext).decode()
+
+            if len(key) < len(ciphertext):
+                key = expand_key_to_match(ciphertext, key)
 
             for i in range(len(ciphertext)):
                 decrypted_text += chr(ord(ciphertext[i]) ^ ord(key[i]))
@@ -139,14 +144,7 @@ def monoalphabetic_cipher():
     else:
         ciphertext = input_ciphertext()
         try:
-            while True:
-                key = input("Enter the key as a dictionary: ")
-                if key == '':
-                    print('Key has no value\n')
-                    time.sleep(2)
-                else:
-                    break
-
+            key = input_key()
             key = ast.literal_eval(key)
 
             reverse_key = {v: k for k, v in key.items()}
@@ -174,13 +172,15 @@ def own_cipher():
     if mode == 'e':
         plaintext = input_plaintext()
 
-        while True:
-            key = input('Enter the key: ')
-            if key == '':
-                print('Key is empty, key should have at least one character\n')
-                time.sleep(2)
-            else:
-                break
+
+        key_method = ask_key_method()
+        if key_method == 'm':
+            key = input_key()
+
+            if len(key) < len(plaintext):
+                key = expand_key_to_match(plaintext, key)
+        else:
+            key = generate_repeating_key(upper_case_letters + lower_case_letters, len(plaintext))
 
         if len(key) < len(plaintext):
             key = expand_key_to_match(plaintext, key)
@@ -206,13 +206,7 @@ def own_cipher():
         if is_hex(ciphertext):
             ciphertext = bytes.fromhex(ciphertext).decode()
 
-        while True:
-            key = input('Enter the key: ')
-            if key == '':
-                print('Key is empty, key should have at least one character')
-                time.sleep(2)
-            else:
-                break
+        key = input_key()
 
         if len(key) < len(ciphertext):
             key = expand_key_to_match(ciphertext, key)

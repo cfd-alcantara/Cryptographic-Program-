@@ -18,6 +18,31 @@ def mode_input():
             print('Invalid input. Input either E for encryption or D for Decryption')
             time.sleep(2)
 
+def ask_key_method():
+    while True:
+        print('\nAdd key manually(M) or generate(G)?')
+        key_method = input('M/G: ').lower()
+        if key_method == 'm':
+            print('\nAdding key manually')
+            return key_method
+
+        elif key_method == 'g':
+            print('\nGenerating key')
+            time.sleep(2)
+            return key_method
+        else:
+            print('Invalid input. Input either M to add a key manually or G to generate a key')
+            time.sleep(2)
+
+def input_key():
+    while True:
+        key = input('Enter the key: ')
+        if key == '':
+            print('Key is empty, key should have at least one character\n')
+            time.sleep(2)
+        else:
+            return key
+
 def input_plaintext():
     while True:
         plaintext = input("\nEnter the plaintext to encrypt: ")
