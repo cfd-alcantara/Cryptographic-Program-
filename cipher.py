@@ -1,18 +1,22 @@
 import time
 import string
 import ast
+import os
 from utils import mode_input, generate_repeating_key, is_hex, convert_binary, generate_nonrepeating_key, expand_key_to_match
 
 lower_case_letters = string.ascii_lowercase
 upper_case_letters = string.ascii_uppercase
 
 def caesar_cipher():
+    os.system('cls')
     plain_text = ''
     cipher_text = ''
 
-    print('\nCaesar Cipher\n')
+    print('Caesar Cipher\n')
     mode = mode_input()
-    while True:
+
+
+    while True: #Gets key and validates
         key = input('Enter the key (1-26): ')
         if not key.isdigit():
             print('Invalid input. Input should only be numbers 1-26')
@@ -29,44 +33,43 @@ def caesar_cipher():
     if mode == 'e':
         user_plain_text = input('Enter the text to encrypt: ')
         for letter in user_plain_text:
-            if letter.islower():
-                index = lower_case_letters.find(letter)
+            if letter.isalpha():
+                letters = lower_case_letters if letter.islower() else upper_case_letters
+                index = letters.find(letter)
                 new_index = index + key
                 if new_index >= 26:
                     new_index -= 26
-                cipher_text += lower_case_letters[new_index]
-            elif letter.isupper():
-                index = upper_case_letters.find(letter)
-                new_index = index + key
-                if new_index >= 26:
-                    new_index -= 26
-                cipher_text += upper_case_letters[new_index]
+                cipher_text += letters[new_index]
             else:
                 cipher_text += letter
+
+        os.system('cls')
+        print('Caesar Cipher Result')
         print(f'\nPLAINTEXT: {user_plain_text}')
+        print(f'Key: {key}')
         print(f'ENCRYPTED MESSAGE or CIPHERTEXT: {cipher_text}')
     else:
         user_cipher_text = input('Enter the text to decrypt: ')
         for letter in user_cipher_text:
-            if letter.islower():
-                index = lower_case_letters.find(letter)
+            if letter.isalpha():
+                letters = lower_case_letters if letter.islower() else upper_case_letters
+                index = letters.find(letter)
                 new_index = index - key
                 if new_index < 0:
                     new_index += 26
-                plain_text += lower_case_letters[new_index]
-            elif letter.isupper():
-                index = upper_case_letters.find(letter)
-                new_index = index - key
-                if new_index < 0:
-                    new_index += 26
-                plain_text += upper_case_letters[new_index]
+                plain_text += letters[new_index]
             else:
                 plain_text += letter
+
+        os.system('cls')
+        print('Caesar Cipher Result')
         print(f'\nCIPHERTEXT: {user_cipher_text}')
+        print(f'Key: {key}')
         print(f'DECRYPTED MESSAGE or PLAINTEXT: {plain_text}') 
 
-def vernam_cipher():
-    print("\nVernam Cipher\n")
+def bitwise_xor_cipher():
+    os.system('cls')
+    print("Bitwise XOR Cipher\n")
 
     mode = mode_input()
 
@@ -87,6 +90,10 @@ def vernam_cipher():
         hex_ciphertext = ciphertext.encode().hex()
 
 
+        os.system('cls')
+        print('Bitwise XOR Cipher Result')
+        print('\nPlaintext:', plaintext)
+        print('Key:', key)
         print("Ciphertext in Binary: ", (binary_ciphertext))
         print("Ciphertext in Hexadecimal: ", (hex_ciphertext))
 
@@ -96,17 +103,22 @@ def vernam_cipher():
         key = input(f"Enter the key: ").upper()
 
         if is_hex(ciphertext) == True:
-            ciphertext = bytes.fromhex(ciphertext).decode()
+            converted_ciphertext = bytes.fromhex(ciphertext).decode()
         else:
-            ciphertext = convert_binary(ciphertext)
+            converted_ciphertext = convert_binary(ciphertext)
 
-        for i in range(len(ciphertext)):
-            decrypted_text += chr(ord(ciphertext[i]) ^ ord(key[i]))
+        for i in range(len(converted_ciphertext)):
+            decrypted_text += chr(ord(converted_ciphertext[i]) ^ ord(key[i]))
 
+        os.system('cls')
+        print('Bitwise XOR Cipher Result')
+        print('Ciphertext:', ciphertext)
+        print('Key:', key)
         print("Decrypted Text:", decrypted_text)
 
 def monoalphabetic_cipher():
-    print("\nMonoalphabetic Cipher\n")
+    os.system('cls')
+    print("Monoalphabetic Cipher\n")
 
     mode = mode_input()
     if mode == 'e':
@@ -125,18 +137,18 @@ def monoalphabetic_cipher():
                     encrypted_message += key[char]
             else:
                 encrypted_message += char
-                
-        print(key)
+
+        os.system('cls')
+        print('Monoalphabetic Cipher Result')
+        print('\nPlaintext:', plaintext) 
+        print('Key:', key)
         print("Encrypted message:", encrypted_message)
     else:
         ciphertext = input("Enter the message to decrypt: ")
         key_str = input("Enter the encryption key as a dictionary: \n")  
         key = ast.literal_eval(key_str)
 
-        print(key)
-
         reverse_key = {v: k for k, v in key.items()}
-        print(reverse_key)
         decrypted_message = ''
         for char in ciphertext:
             if char.isalpha():
@@ -146,9 +158,16 @@ def monoalphabetic_cipher():
                     decrypted_message += reverse_key[char]
             else:
                 decrypted_message += char
-        print("Decrypted message:", decrypted_message)
+        
+        os.system('cls')
+        print('Monoalphabetic Cipher Result')
+        print('\nCiphertext:', ciphertext)
+        print('key:', reverse_key)
+        print('Decrypted message:', decrypted_message)
 
 def own_cipher():
+    os.system('cls')
+    print()
     mode = mode_input()
 
     if mode == 'e':
@@ -169,7 +188,9 @@ def own_cipher():
                 dec_value -= 21
             ciphertext += chr(dec_value)
 
-        print('Plaintext  :', plaintext)
+        os.system('cls')
+        print('Own Cipher Result')
+        print('\nPlaintext  :', plaintext)
         print('Key        :', key)
         print('Ciphertext :', ciphertext.encode().hex())
 
@@ -193,6 +214,8 @@ def own_cipher():
             else:
                 plaintext += chr(dec_value + 21)
 
-        print('Ciphertext :', ciphertext)
+        os.system('cls')
+        print('Own Cipher Result')
+        print('\nCiphertext :', ciphertext)
         print('Key        :', key)
         print('Plaintext  :', plaintext)

@@ -8,11 +8,12 @@ cryptographic_algorithm = ''
 def choose_cryptographic_algorithm():
     while True:
         print('Choose one from the four cryptographic algorithms to use for encryption and decryption')
-        print('1. Ceasar Cipher\n2. Monoalphabetic Cipher\n3. Vernam Cipher\n4. Own Cipher\n5. Close the Program')
+        print('1. Ceasar Cipher\n2. Monoalphabetic Cipher\n3. Bitwise XOR Cipher\n4. Own Cipher\n5. Close the Program')
         choice = input('Enter the number of your choice (1-5): ').lower()
         if choice not in ('1', '2', '3', '4', '5'):
             print('Invalid input. Input should only be number 1-4\n')
             time.sleep(2)
+            os.system('cls')
         else:
             return choice
 
@@ -31,6 +32,7 @@ def prompt_run_again():
             time.sleep(2)
 
 while True:
+    os.system('cls')
     print('Console-Based Cryptographic Program\n')
 
     cryptographic_algorithm = choose_cryptographic_algorithm()
@@ -39,10 +41,11 @@ while True:
     elif cryptographic_algorithm == '2':
         monoalphabetic_cipher()
     elif cryptographic_algorithm == '3':
-        vernam_cipher()
+        bitwise_xor_cipher()
     elif cryptographic_algorithm == '4':
         own_cipher()
     elif cryptographic_algorithm == '5':
+        os.system('cls')
         print('Thank for using this Console-Based Cryptographic Program!')
         time.sleep(2)
         break
